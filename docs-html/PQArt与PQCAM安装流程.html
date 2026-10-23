@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PQArt 与 PQCAM 安装流程</title><style>body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;max-width:920px;margin:28px auto;padding:0 18px;line-height:1.75;color:#222}img{max-width:100%;height:auto;border:1px solid #eee;border-radius:4px}table{border-collapse:collapse;margin:12px 0}td,th{border:1px solid #ccc;padding:6px 10px}th{background:#f5f5f5}pre{background:#f6f8fa;padding:12px;overflow:auto;border-radius:4px}code{background:#f2f2f2;padding:1px 4px;border-radius:3px}h1,h2,h3{line-height:1.35}blockquote{border-left:4px solid #ddd;margin-left:0;padding-left:12px;color:#666}</style></head><body><hr />
+<p>id: pqart-pqart与pqcam安装流程
+title: PQArt 与 PQCAM 安装流程
+status: active
+tags: [PQArt, 安装, 升级, PQCAM]
+source: pq-skill/references/PQArt与PQCAM安装流程.md
+updatedAt: 2026-09-22T04:18:47.255Z</p>
+<hr />
+<h1>PQArt 与 PQCAM 安装流程</h1>
+<p>适用于远程 Windows 桌面安装同一构建号的 PQArt 和 PQCAM。</p>
+<h2>准备</h2>
+<ol>
+<li>取同一构建号的 <code>PQArt_Ent_V11.2_x64_Setup_&lt;构建号&gt;.exe</code> 和 <code>pqCAM_x64_&lt;构建号&gt;.exe</code>；两个安装包必须来自同一构建号。需要最新构建时用 DailyBuild 源，见下节。</li>
+<li>复制到目标机本地临时目录并校验 SHA-256；安装器要在这个本地副本上运行，不要在共享路径上直接启动。</li>
+<li>关闭正在运行的 PQArt，在目标用户的交互桌面以高权限直接启动本地安装包，保持窗口可见。</li>
+</ol>
+<h3>安装包来源</h3>
+<p>DailyBuild 每个构建号一个目录，同时含 PQArt 与 PQCAM，实测可直接枚举读取：</p>
+<pre><code>\\192.168.99.185\RA-Files\RobotArt-DailyBuild\V11.2\&lt;构建号&gt;_&lt;日期&gt;\x64\Setup\PQArt_Ent_V11.2_x64_Setup_&lt;构建号&gt;.exe
+\\192.168.99.185\RA-Files\RobotArt-DailyBuild\V11.2\&lt;构建号&gt;_&lt;日期&gt;\x64\Setup\patch\pqCAM_x64_&lt;构建号&gt;.exe
+</code></pre>
+<p>以 2026-09-22 的 11.2.0.8243 为例，两个包分别是 <code>...\11.2.0.8243_2026-09-22\x64\Setup\PQArt_Ent_V11.2_x64_Setup_8243.exe</code>（343 MB）和 <code>...\x64\Setup\patch\pqCAM_x64_8243.exe</code>（143 MB）。</p>
+<ul>
+<li>目录名把构建号和日期拼在一起，例如 <code>11.2.0.8243_2026-09-22</code>；按名称排序取最后一个即最新，同一天可能有多个构建号。取最新目录：</li>
+</ul>
+<pre><code class="language-powershell">Get-ChildItem -LiteralPath '\\192.168.99.185\RA-Files\RobotArt-DailyBuild\V11.2' -Directory |
+  Sort-Object Name | Select-Object -Last 1
+</code></pre>
+<ul>
+<li><code>x64\Setup</code> 根目录同时放着 Cpt、Edu、Sim 三种版本的安装包，Ent 版必须认准 <code>PQArt_Ent_V11.2_x64_Setup_&lt;构建号&gt;.exe</code>，不要误取 <code>PQArt_Cpt_x64_Setup_&lt;构建号&gt;.exe</code>、<code>PQArt_Edu_x64_Setup_&lt;构建号&gt;.exe</code> 或 <code>PQFactory_Sim_x64_Setup_&lt;构建号&gt;.exe</code>。</li>
+<li>CAM 包不在 <code>Setup</code> 根目录，而在 <code>Setup\patch\</code> 下。该子目录还有 <code>pqCAM_Exchange_x64_&lt;构建号&gt;.exe</code>、<code>pqExchange_x64_&lt;构建号&gt;.exe</code>、<code>RobotArt_Ent_ResLib_x64_&lt;构建号&gt;.exe</code>、<code>RobotArt_Edu_*</code> 等补丁包，按需取用。</li>
+<li>另一来源是内网共享 <code>\\DESKTOP-IDCKPK1\share\pqart_setup\&lt;日期&gt;</code>，早期 8113、8221 从该处取得。两个来源都可用，按目标构建号选择。</li>
+</ul>
+<p>2026-09-22 实测 8243 两个包：文件为 PE，内含 <code>Nullsoft</code>/<code>NSIS</code> 标记，属 NSIS 打包；<code>FileVersion</code> 与 <code>ProductVersion</code> 均为 <code>11.2.0.8243</code>，产品名分别是 <code>PQArt V11.2(64)</code> 和 <code>PQCAM_Package</code>。</p>
+<h2>静默安装（NSIS，已验证 11.2.0.8221）</h2>
+<p>两个安装包都是 NSIS 打包，支持 <code>/S</code> 静默安装，无需 GUI 或 computer use。安装顺序不能颠倒：先 PQArt，后 PQCAM。</p>
+<p>DailyBuild 的最新构建走同一条静默路径：把 <code>Setup\PQArt_Ent_V11.2_x64_Setup_&lt;构建号&gt;.exe</code> 和 <code>Setup\patch\pqCAM_x64_&lt;构建号&gt;.exe</code> 复制到本地临时目录后，按下面的顺序执行即可。8243 的静默安装可用性由用户确认，本技能只在 share 包的 8221 上实测过完整流程。</p>
+<ol>
+<li>关闭所有 PQArt/<code>Unreal</code>/<code>RobotArt</code>/<code>pqCAM</code> 进程，并记下升级前基线：注册表版本、安装目录文件数与体积、C 盘剩余空间。</li>
+<li>把同一构建号的两个安装包复制到本地临时目录，并 <code>Unblock-File</code>。</li>
+<li>在管理员会话依次执行，轮询到安装进程退出：</li>
+</ol>
+<pre><code class="language-powershell">Start-Process -FilePath 'PQArt_Ent_V11.2_x64_Setup_8221.exe' -ArgumentList '/S'
+Start-Process -FilePath 'pqCAM_x64_8221.exe' -ArgumentList '/S'
+</code></pre>
+<ol start="4">
+<li>校验三处版本都等于目标构建号：注册表 <code>DisplayVersion</code>、<code>bin\RobotArt\bin\RobotArt.exe</code> 的 <code>ProductVersion</code>、<code>bin\RobotArt\bin\apCam.dll</code> 的 <code>FileVersion</code>。</li>
+<li>启动冒烟：安装版 <code>RobotArt.exe</code> 应拉起 <code>Unreal</code>、<code>pqBridge</code>、<code>RobotArtHelper</code>，且进程状态为 <code>Responding</code>。</li>
+</ol>
+<p>要点：PQArt 升级会先清空安装目录，把已装的 CAM 文件一并删除，所以<strong>每次升级 PQArt 后都必须重装 PQCAM</strong>。安装目录体积会先降后回升（2092 MB → 1025 MB → 2013 MB），可据此判断 CAM 是否漏装。PQCAM 没有独立卸载注册项，版本只能按 <code>apCam.dll</code> 等文件版本判断。</p>
+<h2>安装 PQArt</h2>
+<ol>
+<li>启动 PQArt 安装包，核对安装版本和当前版本，点击“快速安装”。</li>
+</ol>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqart-install.png" /></p>
+<ol start="2">
+<li>出现“安装完成”后立即点击右侧“完成安装”。</li>
+<li>核验卸载注册表中的 <code>DisplayVersion</code> 和 <code>bin\RobotArt\bin\RobotArt.exe</code> 文件版本等于目标版本。</li>
+</ol>
+<h2>安装 PQCAM</h2>
+<ol>
+<li>PQArt 安装完成后启动同构建号 PQCAM 安装包，保持目标为 <code>PQArt V11.2(64)</code>，点击“快速安装”。</li>
+</ol>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqcam-install.png" /></p>
+<ol start="2">
+<li>出现“安装完成”后立即点击“完成安装”。</li>
+</ol>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqcam-done.png" /></p>
+<ol start="3">
+<li>确认安装器退出，并核验 <code>apCam.dll</code>、<code>bmCamApi*.dll</code> 等 CAM 文件版本等于目标版本。</li>
+</ol>
+<h2>已验证版本</h2>
+<ul>
+<li><code>11.2.0.8113</code>：PQArt SHA-256 <code>D04D3B8F6C713611074827EF79C08E9BA5DA8331CA6D517ABC445B696F2EA185</code>；PQCAM SHA-256 <code>3FB11D1C07AF7F5E1E6AEDFAA94E12081BEB91D49DC7730A71C9EE193F2066A0</code>。</li>
+<li><code>11.2.0.8243</code>（DailyBuild <code>11.2.0.8243_2026-09-22</code>）：打包类型、版本号、文件清单已在本机核实；静默安装尚未在本机复测。</li>
+</ul></body></html>

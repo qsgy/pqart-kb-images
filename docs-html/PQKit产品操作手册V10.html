@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PQKit 产品操作手册 V10</title><style>body{font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;max-width:920px;margin:28px auto;padding:0 18px;line-height:1.75;color:#222}img{max-width:100%;height:auto;border:1px solid #eee;border-radius:4px}table{border-collapse:collapse;margin:12px 0}td,th{border:1px solid #ccc;padding:6px 10px}th{background:#f5f5f5}pre{background:#f6f8fa;padding:12px;overflow:auto;border-radius:4px}code{background:#f2f2f2;padding:1px 4px;border-radius:3px}h1,h2,h3{line-height:1.35}blockquote{border-left:4px solid #ddd;margin-left:0;padding-left:12px;color:#666}</style></head><body><hr />
+<p>id: pqkit-产品操作手册v10
+title: PQKit 产品操作手册 V10
+status: active
+tags: [PQKit, 使用手册, 操作, 安装, 界面]
+source: NAS 回收站 质量保障部备份.知识产权证书.工业软件著作权.产品操作手册-PQKit V10.docx
+updatedAt: 2026-10-23T00:00:00.000Z</p>
+<hr />
+<h1>PQKit 产品操作手册 V10</h1>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-01.png" /></p>
+<p>PQKit V10</p>
+<p>说明文档</p>
+<h1>PQ Kit安装部署</h1>
+<h2>安装</h2>
+<p>PQ Kit为内嵌式开发组件，需要被上层应用集成，无法单独运行。</p>
+<p>上层应用exe所在目录必须为"bin"</p>
+<p>PQ Kit除了双击安装包直接安装外，支持以命令行指定路径、静默参数安装。例如，上层应用exe所在目录bin的上层目录为D:\test且需要静默安装，则命令行需传参/p="D:\test" /S。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-02.png" /></p>
+<p>图1 命令行安装SDK</p>
+<h2>部署</h2>
+<p>上层应用编译生成结果需置于bin目录下。</p>
+<p>上层应用开发工具最低要求为Visual Studio 2015。</p>
+<p>自行创建C#工程需要在工程属性Application-Icon and manifest处指定Manifest文件，需要将系统自动生成的Properties\app.minifest文件替换成Sample\include\C#下的app.manifest。</p>
+<p>a.Sample工程已处理好属性设置，直接编译即可。</p>
+<p>b.新建C#工程需在Properties-Application-Security处勾选Enable ClickOnce security settings方可指定Manifest文件，指定Manifest后需取消勾选Enable ClickOnce security settings。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-03.png" /></p>
+<p>自行创建C++工程需要在工程属性Manifest Tool-Input and Output处指定Additional Manifest Files文件，PQKitSample.exe.manifest文件放在Sample\include\C++下。(Sample工程已处理好属性设置，直接编译即可。)</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-04.png" /></p>
+<h2>Sample</h2>
+<p>PQ Kit会在安装目录下打入Sample目录，其中包含C#示例PQWinFormSample，C++示例PQMFCSample以及示例工程需要的相关文件(include)。</p>
+<p>安装会在安装目录bin下打包已编译好的sample可执行文件并在桌面创建相应的快捷方式，直接打开即可。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-05.png" /></p>
+<p>其中C#示例效果如下图所示</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-06.png" /></p>
+<h1>界面展示</h1>
+<p>软件采用Ribbon风格界面，一种以面板及标签页为架构的用户界面，丰富的命令布局可以帮助用户更容易地找到重要的、常用的功能。界面主要分为八大部分：标题栏、绘图区、机器人加工管理面板、菜单栏、机器人控制面板、调试面板、输出面板、状态栏等。如图所示。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-07.png" /></p>
+<p>图示 功能界面</p>
+<p>标题栏：用于显示软件的名称、账号角色和剩余时间等；功能面板涵盖了OEM的基本功能，包括编程仿真、自定义、校准、自由设计、二次开发，是软件中较为常用的功能栏；</p>
+<p>菜单栏：涵盖了OEM的基本功能，如场景搭建、轨迹规划、仿真调试、显示、系统等，是最常用的功能栏；</p>
+<p>绘图区：用于场景搭建、模型定义、轨迹添加和编辑等操作的显示和编辑界面；</p>
+<p>机器人加工管理面板：共含有十个元素节点，包括场景、零件、坐标系、外部工具、快换工具、法兰工具、底座、状态机、机器人以及工作单元，通过面板中的树形结构可以轻松查看并管理机器人、工具和零件等场景元素；</p>
+<p>调试面板：主要用于显示调整机器人各个轴的关节角信息，编辑轨迹点信息以及查看轨迹点当前状态；</p>
+<p>机器人控制面板：可快速控制机器人轴关节的运动，读取机器人当前姿态，切换三维球参考坐标系以及控制机器人回到机械零点等；</p>
+<p>输出面板：用于显示机器人执行的动作、指令、事件和轨迹点的状态；</p>
+<p>状态栏：包括显示/隐藏某组件、显示全图、局部放大、选中物体显示居中、模型绘制样式、视向等功能。</p>
+<h2>管理面板</h2>
+<p>机器人加工管理面板主要是全局浏览软件中所有模型和操作，使所有目标对象方便管理、简便操作以及直观清晰地查看，如图所示。</p>
+<p>位置：位于软件界面左侧。</p>
+<p>功能说明：面板下挂有十个节点，包括场景、零件、坐标系、外部工具、快换工具、法兰工具、底座、状态机、机器人以及工作单元。机器人下还有坐标系、工具、底座、轨迹和程序等子节点。点开查看该条目下的子节点；点击收起子节点列表。一般来说，每个子节点的右键菜单中都包括了该对象的所有操作，快捷方便地执行多种指令。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-08.jpeg" /></p>
+<p>图示 机器人加工管理面板</p>
+<h2>管理面板</h2>
+<p>位置：位于软件界面右侧。</p>
+<p>功能说明：调试面板与机器人姿态和轨迹点特征紧密联系，如图所示。每个关节的旋转角度范围，通过小滑块左右移动，在这六个范围内改变六个轴的关节角度值，同时支持查看并更改轨迹点的运动指令、速度和轨迹逼近值，并且显示出机器人在该轨迹点执行的事件；</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-09.png" /></p>
+<p>图示 调试面板</p>
+<h2>控制面板</h2>
+<p>此面板控制机器人的关节运动，调整其姿态，读取机器人的关节值，以及使机器人回到机械零点。</p>
+<p>位置：位于软件界面右侧</p>
+<p>功能说明：机器人控制面板分为机器人空间和关节空间两个部分。机械零点：机器人出厂时的初始姿态，如图所示。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-10.png" /></p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-11.png" /></p>
+<p>图示 控制面板</p>
+<h1>场景搭建</h1>
+<h2>三维球</h2>
+<p>位置: 编程仿真-场景搭建-三维球 / 定义组件-场景-三维球</p>
+<p>功能说明：三维球是一个非常简单实用的三维空间定位工具，它可以通过鼠标平移、旋转和原点定位的方式精确定位任何一个三维空间中的物体，同时还可以完成对轨迹旋转平移、轨迹点位姿调整以及产线设备坐标系定义等操作，在场景搭建、自定义、轨迹编辑等过程中发挥着至关重要的作用。</p>
+<p>三维球功能默认状态为灰色不可选中状态，用户通过在绘图区或机器人加工管理面板中选中场景、零件、坐标系、机器人等三维空间中的对象后，三维球功能便会亮显可用，此时在功能栏点击三维球功能图标或快捷键F10可激活三维球；在设备定义、轨迹编辑或轨迹点编辑等操作中，无需手动激活三维球，选中相应功能后三维球便可自动弹出激活。</p>
+<h2>生成轨迹</h2>
+<p>位置：位于【编程仿真】下的【生成轨迹】中。</p>
+<p>功能说明：用于生成机器人工作的轨迹，即机器人运动的路径。“类型”用于指定机器人生成轨迹的方式，通过拾取模型中的点、线、面特征，输入相关的参数生成所需的加工轨迹。为了应对不同的应用场景，如图所示，十种生成轨迹的方式：沿着一个面的一条边；面的一个环；面的环；曲线特征；边；点云打孔；打孔；截面线；面夹边；沿着零件边界的一条边。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-12.png" /></p>
+<p>图示 10种生成轨迹方式</p>
+<h2>生成轨迹</h2>
+<p>编译：对轨迹点进行检查，校验轨迹点的状态，通过编译可以对指令解析状态，轨迹点由灰色更改为其他颜色，对应不同检查结果。</p>
+<p>仿真：模拟出真实环境下设备的运动路径和状态。在仿真管理面板中可以根据自身需要勾选“碰撞检测”、“显示效果”、“场景还原”、“输出事件”等，在仿真管理面板下部可以查看当前运行的轨迹点和轨迹组，右侧输出面板查看运行情况输出信息。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-13.png" /></p>
+<p>图示 仿真</p>
+<h1>定义组件</h1>
+<h2>定义机构</h2>
+<p>即定义机器人功能的延伸、拓展，依照流程可以定义出1至N轴的任意运动机构。对需要定义为机构的模型进行导入处理，在定义弹出的窗口中选择已经完成预处理的模型，按照流程指引逐步完成操作。完整定义流程一般可分为四步，即了解基础知识、坐标检查、关节检查和参数输入；</p>
+<p>定义好的机构可以保存至本地磁盘，通过导入机构功能可以将本地机构加载到软件中，以供场景搭建与仿真使用；</p>
+<h2>定义工具</h2>
+<p>在定义工具之前，需要先通过“输入”导入工具模型于场景中。在定义工具时，需要设置FL、CP、TCP，三者表示的含义如下。</p>
+<p>FL：法兰工具与机器人法兰盘的相接点，即法兰工具的安装点；</p>
+<p>CP：法兰工具与快换工具的相接点，在机器人侧用与工具侧用的相接处；</p>
+<p>TCP：工具加工点，即工具工作的位置。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-14.png" /></p>
+<p>图示 定义工具</p>
+<h2>定义零件</h2>
+<p>零件的模型有多种选择，可将工具、零件和底座等都看作是零件进行自定义，基本可以满足市场上存在多种零件的需求。在定义零件之前，需要先通过“输入”导入零件的模型于场景中。</p>
+<p>定义好的零件可以保存至本地磁盘，通过导入零件功能可以将本地零件加载到软件中，以供场景搭建与仿真使用；</p>
+<h2>定义底座</h2>
+<p>在定义底座之前，需要先通过“输入”导入底座模型于场景中。底座模型导入完成后，点击“定义底座”，并于场景中选择导入的底座模型，点击确认，并设置模型信息与作者信息。底座需要添加一个安装点，导入底座后，通过安装点实现与机器人的自动装配。在定义底座时，安装点已被自动生成，因此，用户只需根据需要编辑调整安装点位置即可。</p>
+<p>定义好的底座可以保存至本地磁盘，通过导入底座功能可以将本地底座加载到软件中，以供场景搭建与仿真使用；</p>
+<h2>定义状态机</h2>
+<p>在自定义状态机之前，需要先通过“输入”导入状态机模型于场景中。目前，状态机支持一轴结构，模型导入成功后，需要将状态机的模型整理为“BASE”和“J1”两部分，即将其分为底座和活动关节。可参考下图。</p>
+<p><img alt="配图" src="https://cdn.jsdelivr.net/gh/qsgy/pqart-kb-images@master/pqkit/pqkit-15.png" /></p>
+<p>图示：装配结构</p>
+<p>模型导入并整理完成后，选择“定义状态机”，在弹出的窗口中进行模型选择，选择模型列表为“场景”，并选择导入的状态机模型名称，点击确定。之后，需要根据状态机本身的运动情况，来对它不同的运动状态进行定义，设置其名称、运动方式为平移或旋转、运动范围及常用状态等。</p>
+<p>定义好的状态机可以保存至本地磁盘，通过导入状态机功能可以将本地状态机加载到软件中，以供场景搭建与仿真使用；</p></body></html>
